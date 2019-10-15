@@ -3,21 +3,23 @@ import org.scalatest.{FunSpec, Matchers, WordSpec}
 class RomanNumeralsSpec extends FunSpec with Matchers {
   def roman(number: Int): String = {
 
+    case class NumeralMap(value: Int, numerals: String)
+
     val mappings = Seq(
-      1 -> "I",
-      4 -> "IV",
-      5 -> "V",
-      9 -> "IX",
-      10 -> "X"
+      NumeralMap(1, "I"),
+      NumeralMap(4, "IV"),
+      NumeralMap(5, "V"),
+      NumeralMap(9, "IX"),
+      NumeralMap(10, "X")
     ).reverse
 
     val mapping = mappings
       .find {
-        case (romanValue, _) => number - romanValue >= 0
+        case NumeralMap(value, _) => number - value >= 0
       }
 
     mapping match {
-      case Some(mapping) => mapping._2 + roman(number - mapping._1)
+      case Some(mapping) => mapping.numerals + roman(number - mapping.value)
       case None => ""
     }
   }
